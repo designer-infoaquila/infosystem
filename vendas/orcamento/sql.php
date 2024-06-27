@@ -905,7 +905,7 @@ if ($type == 'materiais_load') {
     if ($rowCol['id_produto'] == 1) {
         $valor = 0;
     } else {
-        if ($rowCol['moeda'] == '$') {
+        if ($rowCol['moeda'] == 'U$') {
             $consultaMoeda = $pdo->query("SELECT valor FROM moedas WHERE moeda = 'USD' AND data = '" . date('Y-m-d') . "'");
             $linhaMoeda = $consultaMoeda->fetch(PDO::FETCH_ASSOC);
 
