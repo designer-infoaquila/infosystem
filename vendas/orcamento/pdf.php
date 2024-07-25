@@ -9,7 +9,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 $id = anti_injection($_GET['id']);
 
-$consulta = $pdo->query("SELECT os, t1.data, t2.nome as emissor, t3.nome as vendedor, t3.celular as v_celular, t3.email as v_email, tipo_contato, t1.contato as contato, obra, t1.endereco, prazo, condicao, desconto, frete, custos, obs_frete, obs_custos, t1.telefone, t1.email, acrescimo, acabamento, cliente FROM orcamentos as t1 INNER JOIN usuarios as t2 ON t1.emissor = t2.id INNER JOIN vendedor as t3 on t1.vendedor = t3.id_vendedor WHERE id_orcamento = " . $id);
+$consulta = $pdo->query("SELECT os, t1.data, t2.nome as emissor, t3.nome as vendedor, t3.celular as v_celular, t3.email as v_email, tipo_contato, t1.contato as contato, obra, t1.endereco, prazo, condicao, desconto, frete, custos, obs_frete, obs_custos, t1.telefone, t1.email, acrescimo, acabamento, cliente, t1.complemento FROM orcamentos as t1 INNER JOIN usuarios as t2 ON t1.emissor = t2.id INNER JOIN vendedor as t3 on t1.vendedor = t3.id_vendedor WHERE id_orcamento = " . $id);
 $linha = $consulta->fetch(PDO::FETCH_ASSOC);
 
 if ($linha['contato'] != "") {
@@ -275,6 +275,11 @@ if ($linhaCliente['pessoa'] == 'fisica') {
     $cliente = $linhaCliente['nomes'];
 }
 
+if ($linha['complemento'] != "") {
+    $complemento = '<br><b>' . $linha['complemento'] . '</b>';
+} else {
+    $complemento = "";
+}
 $Html = '
 <style>
     @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
@@ -314,7 +319,7 @@ $Html = '
         </td>
         <td align="center" style="padding: 10px 0px; color:#de6565; font-weight:bold;">
             ORÇAMENTO:<br>
-            ' . $linha['os'] . '
+            ' . $linha['os'] . $complemento . '
         </td>
     </tr>
     <tr style="height:7px;">

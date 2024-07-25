@@ -92,7 +92,7 @@ if ($type == 'romaneio_add') {
                     ':documento' => $rowCol_['nota_fiscal'],
                     ':es' => 'E',
                     ':cliente_fornecedor' => $_rowCol_['nome'],
-                    ':medidas' => number_format($rowCol['espessura'], 2, ",", "") . ' x ' . number_format($rowCol['altura'], 2, ",", "") . ' x ' . number_format($rowCol['comprimento'], 2, ",", ""),
+                    ':medidas' => number_format($rowCol['espessura'], 1, ",", "") . ' - ' . number_format($rowCol['comprimento'], 2, ",", "") . ' x ' . number_format($rowCol['altura'], 2, ",", ""),
                     ':chapas' => $rowCol['chapas'],
                     ':metros' => $rowCol['metro'],
                     ':saldo_chapas' => $saldo_chapas,
@@ -137,13 +137,13 @@ if ($type == 'produtos_add') {
     $_total = $_consulta->rowCount();
 
     if ($_total == 0) {
-        $_count = 1;
+        $_count = 0;
     } else {
         $_array = $_consulta->fetch(PDO::FETCH_ASSOC);
         $_count = (int)substr($_array['codigo'], 9, 7);
     }
 
-    $columns = array('id_produto', 'chapas', 'unidade', 'espessura', 'comprimento', 'altura', 'metro', 'temp', 'id_romaneio');
+    $columns = array('id_produto', 'chapas', 'unidade', 'espessura', 'comprimento', 'altura', 'metro', 'custo', 'temp', 'id_romaneio');
     $column_insert = join(', ', $columns);
 
     $param_insert = join(', ', array_map(function ($columns) {
@@ -154,7 +154,7 @@ if ($type == 'produtos_add') {
     $altura = str_replace(",", ".", str_replace(".", "", filter_input(INPUT_POST, 'altura', FILTER_DEFAULT)));
     $metro = str_replace(",", ".", str_replace(".", "", filter_input(INPUT_POST, 'metro', FILTER_DEFAULT)));
 
-    $_columns = array('id_produto', 'codigo', 'chapas', 'unidade', 'espessura', 'comprimento', 'altura', 'metro', 'temp', 'id_r_produto', 'id_romaneio');
+    $_columns = array('id_produto', 'codigo', 'chapas', 'unidade', 'espessura', 'comprimento', 'altura', 'metro',  'temp', 'id_r_produto', 'id_romaneio');
     $_column_insert = join(', ', $_columns);
 
     $_param_insert = join(', ', array_map(function ($_columns) {
@@ -182,6 +182,7 @@ if ($type == 'produtos_add') {
             ':comprimento' => $comprimento,
             ':altura' => $altura,
             ':metro' => $metro,
+            ':custo' => $custo,
             ':temp' =>  "1",
             ":id_romaneio" => $id_romaneio
         );
@@ -312,7 +313,7 @@ if ($type == 'romaneio_edit') {
                     ':documento' => $rowCol_['nota_fiscal'],
                     ':es' => 'E',
                     ':cliente_fornecedor' => $_rowCol_['nome'],
-                    ':medidas' => number_format($rowCol['espessura'], 2, ",", "") . ' x ' . number_format($rowCol['altura'], 2, ",", "") . ' x ' . number_format($rowCol['comprimento'], 2, ",", ""),
+                    ':medidas' => number_format($rowCol['espessura'], 1, ",", "") . ' - ' . number_format($rowCol['comprimento'], 2, ",", "") . ' x ' . number_format($rowCol['altura'], 2, ",", ""),
                     ':chapas' => $rowCol['chapas'],
                     ':metros' => $rowCol['metro'],
                     ':saldo_chapas' => $saldo_chapas,
@@ -504,7 +505,7 @@ if ($type == 'produtos_view') {
 
     $id_romaneio = filter_input(INPUT_POST, 'id_romaneio', FILTER_DEFAULT);
 
-    $consultaProd = $pdo->query("SELECT id_r_produto, descricao, chapas, t1.unidade, t1.espessura, comprimento, altura, metro, t2.moeda, t2.valor as custo FROM romaneio_produtos as t1 INNER JOIN produtos as t2 ON t1.id_produto = t2.id_produto WHERE id_romaneio = " . $id_romaneio . " ORDER BY t1.id_r_produto ASC");
+    $consultaProd = $pdo->query("SELECT id_r_produto, descricao, chapas, t1.unidade, t1.espessura, comprimento, altura, metro, t2.moeda, t1.custo FROM romaneio_produtos as t1 INNER JOIN produtos as t2 ON t1.id_produto = t2.id_produto WHERE id_romaneio = " . $id_romaneio . " ORDER BY t1.id_r_produto ASC");
     $total = $consultaProd->rowCount();
 
     if ($total >= 1) {
@@ -519,26 +520,18 @@ if ($type == 'produtos_view') {
 
             $loopProd .= '<tr>
                             <td class="text-center">' . $i . '</td>
-                            <td>' . $linhaProd['descricao'] . '</td>
-                            <td>' .  number_format($linhaProd['espessura'], 2, ",", "") . '</td>
-                            <td>' .  number_format($linhaProd['comprimento'], 2, ",", "") . '</td>
-                            <td>' .  number_format($linhaProd['altura'], 2, ",", "") . '</td>
-                            <td>' . $linhaProd['chapas'] . '</td>
+                            <td>' . mb_strtoupper($linhaProd['descricao']) . '</td>
+                            <td>Esp ' . number_format($linhaProd['espessura'], 1, ",", "") . ' Cm - ' . number_format($linhaProd['comprimento'], 2, ",", "") . ' x ' . number_format($linhaProd['altura'], 2, ",", "") . ' Metros</td>  
                             <td>' .  number_format($linhaProd['metro'], 3, ",", "") . '</td>
+                            <td>' . $linhaProd['chapas'] . '</td>
                             <td class="text-nowrap">R$ ' . $custo . '</td>
                             <td style="padding: 0px;text-align: center;">
-                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon remover-produto" title="Remover" id="' . $linhaProd['id_r_produto'] . '">
+                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon disabled" title="Remover" id="' . $linhaProd['id_r_produto'] . '">
                                     <i class="la la-trash"></i>
                                 </a>
                             </td>
                         </tr>';
             $i++;
-
-            // <td style="padding: 0px;text-align: center;">
-            //     <a href="javascript:;" id="' . $linhaProd['id_r_produto'] . '" class="btn btn-sm btn-clean btn-icon editProduto" title="Editar">
-            //         <i class="la la-edit"></i>
-            //     </a>
-            // </td>
 
             $totalChapas += $linhaProd['chapas'];
             $totalMetros += $linhaProd['metro'];
@@ -548,37 +541,17 @@ if ($type == 'produtos_view') {
                         <td class="text-center"></td>
                         <td><b>TOTAL</b></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>' . $totalChapas . '</td>
                         <td>' .  number_format($totalMetros, 3, ",", "") . '</td>
+                        <td>' . $totalChapas . '</td>
                         <td class="text-nowrap">R$ ' . number_format($totalCusto, 2, ",", ".") . '</td>
                         <td></td>
                     </tr>';
         echo $loopProd;
     } else {
         echo "<tr>
-                 <th class='text-center' colspan='9'>Sem produtos cadastrados</th>
+                 <th class='text-center' colspan='7'>Sem produtos cadastrados</th>
              </tr>";
     }
 }
 
-// if ($type == 'romaneio_load_edit') {
-
-//     $sql = $pdo->query("SELECT t2.descricao as produto, t1.espessura, chapas, t1.unidade, comprimento, altura, metro, t1.moeda ,t1.custo, t1.id_produto, id_r_produto FROM romaneio_produtos as t1 INNER JOIN produtos as t2 ON t1.id_produto = t2.id_produto WHERE id_r_produto = " . $_POST['id']);
-//     $rowCol = $sql->fetch(PDO::FETCH_ASSOC);
-
-//     echo $rowCol['produto'] . "|"; //0
-//     echo $rowCol['espessura'] . "|"; //1
-//     echo $rowCol['chapas'] . "|"; //2
-//     echo $rowCol['unidade'] . "|";  //3
-//     echo $rowCol['comprimento'] . "|";  //4
-//     echo $rowCol['altura'] . "|";  //5
-//     echo $rowCol['metro'] . "|";  //6
-//     echo $rowCol['moeda'] . "|";  //7
-//     echo $rowCol['custo'] . "|";  //8
-//     echo $rowCol['id_produto'] . "|";  //9
-//     echo $rowCol['id_r_produto'] . "|";  //10
-
-// }
 /* end::Outro */

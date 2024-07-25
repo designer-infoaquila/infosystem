@@ -234,10 +234,7 @@ var KTDatatableProdutosServer = (function () {
 					targets: 0,
 					width: '70px',
 				},
-				{
-					targets: 2,
-					width: '70px',
-				},
+
 				{
 					className: 'text-center',
 					targets: -1,

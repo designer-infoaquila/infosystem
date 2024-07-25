@@ -8,14 +8,14 @@ include __DIR__ . '/../../inc/company.php';
 $type = $_POST['type'];
 $data = date('Y-m-d');
 
-$columns = array('id_orcamento', 'os', 'data', 'emissor', 'vendedor', 'cliente', 'telefone', 'email', 'validade', 'obra', 'endereco', 'tipo_contato', 'contato', 'prazo', 'condicao', 'desconto', 'frete', 'custos', 'acrescimo', 'acabamento', 'observacao', 'obs_frete', 'obs_custos', 'sem', 'status', 'id_empresa');
+$columns = array('id_orcamento', 'os', 'complemento', 'data', 'emissor', 'vendedor', 'cliente', 'telefone', 'email', 'validade', 'obra', 'endereco', 'tipo_contato', 'contato', 'prazo', 'condicao', 'desconto', 'frete', 'custos', 'acrescimo', 'acabamento', 'observacao', 'obs_frete', 'obs_custos', 'sem', 'status', 'id_empresa');
 $column_insert = join(', ', $columns);
 
 $param_insert = join(', ', array_map(function ($columns) {
     return ":$columns";
 }, $columns));
 
-$columns_ = array('emissor', 'vendedor', 'cliente', 'telefone', 'email', 'validade', 'obra', 'endereco',  'tipo_contato', 'contato', 'prazo', 'condicao', 'desconto', 'frete', 'custos', 'acrescimo', 'acabamento', 'observacao', 'obs_frete', 'obs_custos', 'sem');
+$columns_ = array('complemento', 'emissor', 'vendedor', 'cliente', 'telefone', 'email', 'validade', 'obra', 'endereco',  'tipo_contato', 'contato', 'prazo', 'condicao', 'desconto', 'frete', 'custos', 'acrescimo', 'acabamento', 'observacao', 'obs_frete', 'obs_custos', 'sem');
 
 $param_update = join(', ', array_map(
     function ($columns_) {
@@ -110,6 +110,7 @@ if ($type == 'orcamento_add') {
         $parameters = array(
             ':id_orcamento' => filter_input(INPUT_POST, "id_orcamento", FILTER_DEFAULT),
             ':os' => filter_input(INPUT_POST, "os", FILTER_DEFAULT),
+            ':complemento' => filter_input(INPUT_POST, "complemento", FILTER_DEFAULT),
             ':data' => $dataNow->format('Y-m-d'),
             ':emissor' => filter_input(INPUT_POST, "emissor", FILTER_DEFAULT),
             ':vendedor' => filter_input(INPUT_POST, "vendedor", FILTER_DEFAULT),
@@ -492,6 +493,7 @@ if ($type == 'orcamento_edit') {
             $parameters = array(
                 ':id_orcamento' => $id_orcamento,
                 ':os' => filter_input(INPUT_POST, "os_novo", FILTER_DEFAULT),
+                ':complemento' => filter_input(INPUT_POST, "complemento", FILTER_DEFAULT),
                 ':data' => $dataNow->format('Y-m-d'),
                 ':emissor' => filter_input(INPUT_POST, "emissor", FILTER_DEFAULT),
                 ':vendedor' => filter_input(INPUT_POST, "vendedor", FILTER_DEFAULT),
@@ -632,6 +634,7 @@ if ($type == 'orcamento_edit') {
             $sql = 'UPDATE orcamentos SET ' . $param_update . ' WHERE id_orcamento = ' . $_POST['id_orcamento'];
             $stmt = $pdo->prepare($sql);
             $parameters = array(
+                ':complemento' => filter_input(INPUT_POST, "complemento", FILTER_DEFAULT),
                 ':emissor' => filter_input(INPUT_POST, "emissor", FILTER_DEFAULT),
                 ':vendedor' => filter_input(INPUT_POST, "vendedor", FILTER_DEFAULT),
                 ':cliente' => $cliente,

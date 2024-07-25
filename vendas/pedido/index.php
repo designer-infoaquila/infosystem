@@ -87,8 +87,6 @@
                     <table class="table table-bordered table-hover table-checkable table-striped" id="kt_datatable" style="margin-top: 13px !important">
                         <thead style="background: #9acfea;">
                             <tr>
-                                <th>
-                                </th>
                                 <th>Pedido&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                 <th>Emissor</th>
                                 <th>Cliente</th>

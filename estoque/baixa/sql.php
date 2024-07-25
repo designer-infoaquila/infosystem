@@ -42,7 +42,7 @@ if ($type == 'baixa_add') {
         $stmt_ = $pdo->prepare('UPDATE baixa_produtos SET temp = 0 WHERE id_baixa = ' . $id_baixa);
         $stmt_->execute();
 
-        $columns_ = array('id_produto', 'lancamento', 'movimento', 'codigo', 'documento', 'es', 'cliente_fornecedor', 'medidas', 'valor', 'moeda', 'chapas', 'metros', 'saldo_chapas', 'saldo_metros');
+        $columns_ = array('id_produto', 'lancamento', 'movimento', 'documento', 'es', 'cliente_fornecedor', 'medidas', 'chapas', 'metros', 'saldo_chapas', 'saldo_metros');
         $column_insert_ = join(', ', $columns_);
 
         $param_insert_ = join(', ', array_map(function ($columns_) {
@@ -71,13 +71,10 @@ if ($type == 'baixa_add') {
                     ':id_produto' => $rowCol['id_produto'],
                     ':lancamento' => date('Y-m-d'),
                     ':movimento' => $rowCol_['saida'],
-                    ':codigo' => $rowCol['codigo'],
                     ':documento' => 'SAIDA',
                     ':es' => 'S ',
                     ':cliente_fornecedor' => $_rowCol_['nome'],
-                    ':medidas' => number_format($rowCol['espessura'], 2, ",", "") . ' x ' . number_format($rowCol['altura'], 2, ",", "") . ' x ' . number_format($rowCol['comprimento'], 2, ",", ""),
-                    ':valor' => 1,
-                    ':moeda' => "R$",
+                    ':medidas' => 'Esp ' . number_format($rowCol['espessura'], 1, ",", "") . ' Cm - ' . number_format($rowCol['comprimento'], 2, ",", "") . ' x ' . number_format($rowCol['altura'], 2, ",", "") . ' Metros',
                     ':chapas' => $rowCol['chapas'],
                     ':metros' => $rowCol['metro'],
                     ':saldo_chapas' => $saldo_chapas,
@@ -87,7 +84,7 @@ if ($type == 'baixa_add') {
 
                 echo 'success||';
 
-                $stmt_ = $pdo->prepare('DELETE FROM romaneio_produtos WHERE codigo = :codigo');
+                $stmt_ = $pdo->prepare('DELETE FROM romaneio_estoque WHERE codigo = :codigo');
                 $stmt_->bindParam(':codigo', $rowCol['codigo']);
                 $stmt_->execute();
             } catch (PDOException $e) {
@@ -176,7 +173,6 @@ if ($type == 'fornecedores_load') {
 
 }
 
-
 if ($type == 'produtos_view') {
 
     $id_baixa = filter_input(INPUT_POST, 'id_baixa', FILTER_DEFAULT);
@@ -192,11 +188,9 @@ if ($type == 'produtos_view') {
                             <td class="text-center">' . $i . '</td>
                             <td>' . $linhaProd['codigo'] . '</td>
                             <td>' . $linhaProd['descricao'] . '</td>
-                            <td>' .  number_format($linhaProd['espessura'], 2, ",", "") . '</td>
-                            <td>' .  number_format($linhaProd['comprimento'], 2, ",", "") . '</td>
-                            <td>' .  number_format($linhaProd['altura'], 2, ",", "") . '</td>
-                            <td>' . $linhaProd['chapas'] . '</td>
+                            <td>Esp ' . number_format($linhaProd['espessura'], 1, ",", "") . ' Cm - ' . number_format($linhaProd['comprimento'], 2, ",", "") . ' x ' . number_format($linhaProd['altura'], 2, ",", "") . ' Metros</td>                            
                             <td>' .  number_format($linhaProd['metro'], 3, ",", "") . '</td>
+                            <td>' . $linhaProd['chapas'] . '</td>
                         </tr>';
             $i++;
 
@@ -206,17 +200,16 @@ if ($type == 'produtos_view') {
         $loopProd .= '<tr style="background-color: #4a78c885;">
                         <td class="text-center"></td>
                         <td></td>
-                        <td><b>TOTAL</b></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>' . $totalChapas . '</td>
+                        <td><b>TOTAL</b></td>                        
                         <td>' .  number_format($totalMetros, 3, ",", "") . '</td>
+                        <td>' . $totalChapas . '</td>
+                        
                     </tr>';
         echo $loopProd;
     } else {
         echo "<tr>
-                 <th class='text-center' colspan='8'>Sem produtos cadastrados</th>
+                 <th class='text-center' colspan='7'>Sem produtos cadastrados</th>
              </tr>";
     }
 }

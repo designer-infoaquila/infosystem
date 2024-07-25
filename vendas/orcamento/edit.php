@@ -171,6 +171,7 @@ if ($arrayArea !== null) {
     }
 }
 
+$os_novo = explode("/", $linha['os']);
 
 ?>
 <style>
@@ -526,7 +527,7 @@ if ($arrayArea !== null) {
                                     </div>
                                     <!--begin::Actions-->
                                     <div class="d-flex justify-content-between row">
-                                        <div class="col-8 text-right">
+                                        <div class="col-6 text-right">
 
                                             <div class="checkbox-list pt-4 float-right">
                                                 <label class="checkbox">
@@ -540,7 +541,11 @@ if ($arrayArea !== null) {
                                         </div>
                                         <div class="col text-right pt-1">
 
-                                            <input type="text" class="form-control" name="os_novo" value="<?= $linha['os'] ?>" maxlength="50" />
+                                            <input type="number" class="form-control" name="os_novo" value="<?= $os_novo[0] ?>" min="<?= $os_novo[0] ?>" />
+                                        </div>
+                                        <div class="col text-right pt-1">
+
+                                            <input type="text" class="form-control" name="complemento" value="<?= $linha['complemento'] ?>" maxlength="50" placeholder="Complemento OS" />
                                         </div>
                                         <div class="col-1 text-right">
 

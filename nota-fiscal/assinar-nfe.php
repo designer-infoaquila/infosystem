@@ -334,7 +334,7 @@ $std->vTroco = null; //incluso no layout 4.00, obrigatório informar para NFCe (
 
 $nfe->tagpag($std);
 
-$std->tPag = '01';
+$std->tPag = '15';
 $std->vPag = $tt; //Obs: deve ser informado o valor pago pelo cliente
 $std->CNPJ = '51125803000103';
 $std->tBand = '01';

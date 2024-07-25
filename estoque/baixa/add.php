@@ -17,6 +17,16 @@ $stmt = $pdo->prepare("DELETE FROM baixa_produtos WHERE temp = 1 AND id_baixa = 
 $stmt->execute();
 
 ?>
+<style>
+    #kt_datatable_produtos thead th:nth-last-child(2):not(.dataTables_empty),
+    #kt_datatable_produtos tbody td:nth-last-child(2):not(.dataTables_empty),
+    #kt_datatable_produtos tfoot th:nth-last-child(2):not(.dataTables_empty),
+    #kt_datatable_produtos thead th:nth-last-child(3):not(.dataTables_empty),
+    #kt_datatable_produtos tbody td:nth-last-child(3):not(.dataTables_empty),
+    #kt_datatable_produtos tfoot th:nth-last-child(3):not(.dataTables_empty) {
+        display: none;
+    }
+</style>
 <!--begin::Subheader-->
 <div class="subheader py-2 py-lg-6" id="kt_subheader">
     <div class="w-100 d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
@@ -130,16 +140,14 @@ $stmt->execute();
                                                     <th class="text-center" scope="col">Item</th>
                                                     <th scope="col">Código</th>
                                                     <th scope="col">Descrição</th>
-                                                    <th scope="col">Esp.</th>
-                                                    <th scope="col">Comp.</th>
-                                                    <th scope="col">Altura</th>
-                                                    <th scope="col">Chapas</th>
+                                                    <th scope="col">Medidas</th>
                                                     <th scope="col">Metro</th>
+                                                    <th scope="col">Chapas</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="produtos">
                                                 <tr>
-                                                    <th class="text-center" colspan="8">Sem produtos cadastrados</th>
+                                                    <th class="text-center" colspan="6">Sem produtos cadastrados</th>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -272,7 +280,7 @@ $stmt->execute();
                             <tr>
                                 <th>Código</th>
                                 <th>Descrição</th>
-                                <th>Espessura</th>
+                                <th>Medidas</th>
                                 <th>Comprimento</th>
                                 <th>Altura</th>
                                 <th>#</th>

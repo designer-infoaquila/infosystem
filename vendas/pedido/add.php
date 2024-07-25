@@ -40,11 +40,14 @@ if ($totalMoedaE >= 1) {
 }
 
 $moedas .= ' <div class="ribbon-target" style="bottom: 15px;">
-                    <span class="ribbon-inner bg-success"></span>Dólar: ' . $dolar . '<br>Euro: ' . $euro . '
-                </div>';
+    <span class="ribbon-inner bg-success"></span>Dólar: ' . $dolar . '<br>Euro: ' . $euro . '
+</div>';
 
-// $stmt = $pdo->prepare("DELETE FROM pedidos_produtos WHERE temp = 1");
-// $stmt->execute();
+$stmt = $pdo->prepare("DELETE FROM pedidos_produtos WHERE temp = 1");
+$stmt->execute();
+
+$stmt_ = $pdo->prepare("DELETE FROM pedidos_pagamentos WHERE temp = 1");
+$stmt_->execute();
 
 unset($_SESSION['produtos']);
 
@@ -59,6 +62,7 @@ unset($_SESSION['produtos']);
         vertical-align: middle;
     }
 
+    #kt_datatable_estoque_filter,
     #kt_datatable_estoque th:nth-last-child(1),
     #kt_datatable_estoque td:nth-last-child(1):not(.dataTables_empty),
     #kt_datatable_estoque th:nth-last-child(2),
@@ -152,7 +156,7 @@ unset($_SESSION['produtos']);
                                 <!--begin::Form Wizard-->
                                 <form class="form" id="pedido_add_form">
                                     <input type="hidden" name="type" value="pedido_add" />
-                                    <input type="hidden" name="emissor" value="<?= $_COOKIE['id_infosystem'] ?>" />
+                                    <input type="hidden" name="emissor" value="<?= $_COOKIE['id_is'] ?>" />
                                     <input type="hidden" name="id_pedido" id="id_pedido" value="<?= $id_pedido ?>">
 
                                     <div class="form-group row">
@@ -194,8 +198,8 @@ unset($_SESSION['produtos']);
                                     <div class="table-responsive-lg">
 
                                         <table class="table table-striped table-bordered ">
-                                            <thead>
-                                                <tr class="table-active">
+                                            <thead style="background: #9acfea !important;">
+                                                <tr>
                                                     <th class="text-center" scope="col">Item</th>
                                                     <th class="text-center">Chapas</th>
                                                     <th style="width:300px; text-align:center;">Descrição</th>
@@ -203,7 +207,7 @@ unset($_SESSION['produtos']);
                                                     <th class="text-nowrap text-right" scope="col">M²</th>
                                                     <th class="text-nowrap text-right" scope="col">Valor Unitário</th>
                                                     <th class="text-nowrap text-right" scope="col">Valor Total</th>
-                                                    <th scope="col">#</th>
+                                                    <th scope="col" style="width:90px; text-align:center;">#</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="materiais">
@@ -227,7 +231,6 @@ unset($_SESSION['produtos']);
                                                 </div>
                                             </div>
                                         </div>
-
 
                                         <div class="col-12 col-lg">
                                             <label>Valor IPI:</label>
@@ -284,7 +287,7 @@ unset($_SESSION['produtos']);
                                                 <div class="card-body">
                                                     <div class="form-group row">
                                                         <div class="col-12 col-lg-12">
-                                                            <label>Comprador:<span class="text-danger">*</span></label>
+                                                            <label>Comprador:</label>
                                                             <input type="text" class="form-control" name="comprador" placeholder="Comprador">
                                                         </div>
 
@@ -342,7 +345,7 @@ unset($_SESSION['produtos']);
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <label>Valor:</label>
-                                                                    <input type="text" class="form-control money2Mask" name="valor" value="" placeholder="Valor">
+                                                                    <input type="text" class="form-control moneyMask" name="valor" value="" placeholder="Valor">
                                                                 </div>
                                                             </div>
 
@@ -351,8 +354,8 @@ unset($_SESSION['produtos']);
 
                                                         <div class="col-12">
                                                             <table class="table table-bordered table-striped table-sm rounded table-hover table-extra mb-0" id="kt_datatable_pagamento">
-                                                                <thead>
-                                                                    <tr class="table-active">
+                                                                <thead style="background: #9acfea !important;">
+                                                                    <tr>
                                                                         <th scope="col">Forma</th>
                                                                         <th scope="col">Prazo</th>
                                                                         <th scope="col">Valor</th>
@@ -401,12 +404,12 @@ unset($_SESSION['produtos']);
                                         <div class="col-6">
                                             <!--begin::Actions-->
                                             <div class="d-flex justify-content-end">
-                                                <div class="mr-5 text-right" style="line-height: 1.25;color: #c10c0c;">
+                                                <!-- <div class="mr-5 text-right" style="line-height: 1.25;color: #c10c0c;">
                                                     <span>Saldo a Pagar</span><br>
                                                     <span style="font-weight: 800;font-size: 22px;">R$ 100,00</span>
-                                                </div>
+                                                </div> -->
                                                 <span class="txt_total"></span>
-                                                <input type="hidden" name="vl_total" value="">
+                                                <input type="hidden" name="vl_pedido" value="">
                                                 <div>
                                                     <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Gravar</button>
                                                 </div>
@@ -438,7 +441,7 @@ unset($_SESSION['produtos']);
         </div>
     </div>
 </div>
-<!-- Modal Lista Materiais-->
+<!-- Modal Add Produto-->
 <div class="modal fade" id="addProduto" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -502,9 +505,51 @@ unset($_SESSION['produtos']);
                 </button>
             </div>
             <div class="modal-body">
-                <div data-scroll="true" data-height="500">
+                <div data-scroll="true" data-height="500" data-wheel-propagation="true">
                     <!-- <input type="text" id="id_r_produto" /> -->
                     <!--begin: Datatable-->
+                    <form class="mb-15">
+                        <div class="row">
+                            <div class="col-lg-4 mb-lg-0 mb-6">
+                                <label>Código:</label>
+                                <input type="text" class="form-control datatable-input" placeholder="Ex: TNCP200010000001" data-col-index="1" value="" />
+                            </div>
+                            <div class="col-lg-2 mb-lg-0 mb-6">
+                                <label>Espessura:</label>
+                                <input type="text" class="form-control datatable-input qtd1Mask" placeholder="Ex: 1,8" data-col-index="2" value="" />
+                            </div>
+                            <div class="col-lg-2 mb-lg-0 mb-6">
+                                <label>Comprimento:</label>
+                                <input type="text" class="form-control datatable-input qtdMask" placeholder="Ex: 2,00" data-col-index="3" value="" />
+                            </div>
+                            <div class="col-lg-2 mb-lg-0 mb-6">
+                                <label>Altura:</label>
+                                <input type="text" class="form-control datatable-input qtdMask" placeholder="Ex: 2,00" data-col-index="4" value="" />
+                            </div>
+                            <div class="col-lg-2 mb-lg-0 mb-6">
+                                <label>M²:</label>
+                                <input type="text" class="form-control datatable-input qtd3Mask" placeholder="Ex: 2,000" data-col-index="5" value="" />
+                            </div>
+                        </div>
+                        <div class="row mb-6">
+
+                            <div class="col-lg mb-lg-0 mb-6 pt-6 text-right">
+                                <button class="btn btn-primary btn-primary--icon" id="kt_search">
+                                    <span>
+                                        <i class="la la-search"></i>
+                                        <span>Pesquisar</span>
+                                    </span>
+                                </button>&#160;&#160;
+                                <button class="btn btn-secondary btn-secondary--icon" id="kt_reset">
+                                    <span>
+                                        <i class="la la-close"></i>
+                                        <span>Limpar</span>
+                                    </span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
                     <table class="table table-sm table-bordered table-hover table-checkable table-striped display" id="kt_datatable_estoque">
                         <thead style="background: #9acfea;">
                             <tr>
@@ -532,6 +577,184 @@ unset($_SESSION['produtos']);
         </div>
     </div>
 </div>
+
+<input type="hidden" id="modal_ativo">
+<div class="modais"></div>
+
+<div class="modal fade" id="editProduto" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="" id="produtos_edit" data-wizard-state="step-first" data-wizard-clickable="true">
+                <form class="form" id="produtos_edit_form">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="descricaoProduto">Editar <b>()</b></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div data-scroll="true" data-height="500">
+                            <div class="row mb-0">
+                                <div class="col-12">
+
+                                    <!--begin::Wizard Body-->
+                                    <div class="row justify-content-center">
+                                        <div class="col-xl-10 col-xxl-10">
+
+                                            <input type="hidden" name="type" value="produtos_edit" />
+                                            <input type="hidden" name="id_produto" value="" />
+
+                                            <div class="form-group row mb-5">
+                                                <label class="col-form-label col-xl-3 col-lg-3">Produto:</label>
+                                                <div class="col-xl-9 col-lg-9">
+
+                                                    <input type="text" class="form-control form-control-sm" name="produto" value="" readonly tabindex="-1">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-7">
+                                                    <div class="form-group row mb-5">
+                                                        <label class="col-form-label col-xl-5 col-lg-5" style="flex: 0 0 42.666667% !important;max-width: 42.666667% !important;">Espessura:</label>
+                                                        <div class="col-lg-7 col-xl-7" style="flex: 0 0 57.333333% !important;">
+
+                                                            <input type="text" class="form-control form-control-sm" name="espessura" value="" readonly tabindex="-1">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-5">
+                                                    <div class="form-group row mb-5">
+                                                        <label class="col-form-label col-xl-3 col-lg-3">Chapas:</label>
+                                                        <div class="col-lg-9 col-xl-9">
+                                                            <input type="number" class="form-control form-control-sm" name="chapas" value="" readonly tabindex="-1">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="form-group row mb-5">
+                                                        <label class="col-form-label col-xl-3 col-lg-3">Comprimento:<span class="text-danger">*</span></label>
+                                                        <div class="col-lg-9 col-xl-9">
+                                                            <input type="text" class="form-control form-control-sm qtdMask" name="comprimento" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="form-group row mb-5">
+                                                        <label class="col-form-label col-xl-3 col-lg-3">Altura:<span class="text-danger">*</span></label>
+                                                        <div class="col-lg-9 col-xl-9">
+                                                            <input type="text" class="form-control form-control-sm qtdMask" name="altura" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="form-group row mb-0">
+                                                        <label class="col-form-label col-xl-3 col-lg-3">Metro ²:<span class="text-danger">*</span></label>
+                                                        <div class="col-lg-9 col-xl-9">
+                                                            <input type="text" class="form-control form-control-sm qtd3Mask" name="metro" value="">
+                                                        </div>
+                                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon atualizar" title="Atualizar" style="bottom: 5px;">
+                                                            <i class="la la-refresh"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="separator separator-dashed my-5"></div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="form-group row mb-5">
+                                                        <label class="col-form-label col-xl-3 col-lg-3">Moeda:<span class="text-danger">*</span></label>
+                                                        <div class="col-lg-9 col-xl-9">
+                                                            <select class="form-control form-control-sm" name="moeda">
+                                                                <option value="R$" selected>Real</option>
+                                                                <option value="U$">Dólar</option>
+                                                                <option value="€">Euro</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="form-group row mb-0">
+                                                        <label class="col-form-label col-xl-3 col-lg-3">Preço:<span class="text-danger">*</span></label>
+                                                        <div class="col-lg-9 col-xl-9">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control form-control-sm moneyMask" placeholder="Preço" name="custo">
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text">
+                                                                        <i class="la la-dollar-sign icon-lg"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="separator separator-dashed my-5"></div>
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="form-group row mb-5">
+                                                        <label class="col-form-label col-xl-3 col-lg-3">Valor em R$:</label>
+                                                        <div class="col-lg-9 col-xl-9">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control form-control-sm" name="valor_real" value="" readonly tabindex="-1">
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text">
+                                                                        <i class="la la-dollar-sign icon-lg"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="form-group row mb-5">
+                                                        <label class="col-form-label col-xl-3 col-lg-3">Total:</label>
+                                                        <div class="col-lg-9 col-xl-9">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control form-control-sm" name="subtotal" value="" readonly tabindex="-1">
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text">
+                                                                        <i class="la la-dollar-sign icon-lg"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Form Wizard-->
+                                        </div>
+                                    </div>
+                                    <!--end::Wizard Body-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary font-weight-bolder" data-wizard-type="action-submit">Gravar</button>
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Fechar sem Incluir</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--end::Container-->
 
 <!--begin::Footer-->

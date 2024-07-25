@@ -1,6 +1,14 @@
 'use strict';
 
 var KTDatatablesDataSourceAjaxServer = (function () {
+	function FormataStringData(data) {
+		var retorno = data.split(' ');
+
+		var dia = retorno[0].split('-')[2];
+		var mes = retorno[0].split('-')[1];
+		var ano = retorno[0].split('-')[0];
+		return ('0' + dia).slice(-2) + '/' + ('0' + mes).slice(-2) + '/' + ano;
+	}
 	var initTable1 = function () {
 		var table = $('#kt_datatable').DataTable({
 			language: {
@@ -10,7 +18,7 @@ var KTDatatablesDataSourceAjaxServer = (function () {
 			processing: true,
 			serverSide: true,
 			ajax: HOST_URL + 'vendas/pedido/ajax.php',
-			order: [[1, 'asc']],
+			order: [[0, 'asc']],
 			columnDefs: [
 				{
 					targets: 0,
@@ -23,7 +31,16 @@ var KTDatatablesDataSourceAjaxServer = (function () {
 					width: '70px',
 					className: 'text-center',
 				},
+				{
+					targets: 4,
+					width: '180px',
+					className: 'text-center',
+					render: function (data, type, row) {
 
+						return FormataStringData(data);
+
+					},
+				},
 				{
 
 					className: 'text-center',
@@ -48,7 +65,7 @@ var KTDatatablesDataSourceAjaxServer = (function () {
 					title: 'Ações',
 					orderable: false,
 					render: function (data, type, row) {
-						if (row[7] == 1) {
+						if (row[6] == 1) {
 							var btn_status = '<a href="#" class="btn btn-sm btn-clean btn-icon desativar" id="' + data + '" title="Desativar">\
 													<i class="la la-times-circle"></i>\
 												</a>';
@@ -58,7 +75,7 @@ var KTDatatablesDataSourceAjaxServer = (function () {
 												</a>';
 						}
 
-						return (btn_status + '<a href="pdf?id=' + data + '" class="btn btn-sm btn-clean btn-icon" title="Imprimir" target="new">\
+						return (btn_status + '<a href="pdf-romaneio?id=' + data + '" class="btn btn-sm btn-clean btn-icon" title="Imprimir Romaneio" target="new">\
 									<i class="la la-print"></i>\
 								</a>\
 								<a href="edit?id=' + data + '" class="btn btn-sm btn-clean btn-icon" title="Editar">\

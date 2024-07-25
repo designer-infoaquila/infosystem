@@ -115,6 +115,7 @@ while ($linhaAcabamento = $consultaAcabamento->fetch(PDO::FETCH_ASSOC)) {
                                 <!--begin::Form Wizard-->
                                 <form class="form" id="orcamento_add_form">
                                     <input type="hidden" name="type" value="orcamento_add" />
+                                    <input type="hidden" name="complemento" value="" />
                                     <input type="hidden" name="id_orcamento" value="<?= $id_orcamento ?>" id="id_orcamento" />
 
                                     <div class="form-group row">

@@ -25,19 +25,23 @@ $columns = array(
         return $d;
     }),
     array('db' => 'espessura', 'dt' => 2, 'formatter' => function ($d, $row) {
-        $total = $row[3] * $row[4];
-        return number_format($d, 2, ",", "") . "x " . number_format($row[3], 2, ",", "") . "x " . number_format($row[4], 2, ",", "") . "= " . number_format($total, 2, ",", "");
+
+        return 'Esp ' . number_format($d, 1, ",", "") . " Cm - " . number_format($row[4], 2, ",", "") . " x " . number_format($row[5], 2, ",", "") . " Metros";
     }),
     array('db' => 'comprimento', 'dt' => 3, 'formatter' => function ($d, $row) {
+        $total = $row[4] * $row[5];
+        return number_format($total, 3, ",", "");
+    }),
+    array('db' => 'comprimento', 'dt' => 4, 'formatter' => function ($d, $row) {
         return $d;
     }),
-    array('db' => 'altura', 'dt' => 4, 'formatter' => function ($d, $row) {
+    array('db' => 'altura', 'dt' => 5, 'formatter' => function ($d, $row) {
         return $d;
     }),
-    array('db' => 'chapas', 'dt' => 5, 'formatter' => function ($d, $row) {
+    array('db' => 'chapas', 'dt' => 6, 'formatter' => function ($d, $row) {
         return $d;
     }),
-    array('db' => 't3.nome', 'dt' => 6, 'formatter' => function ($d, $row) {
+    array('db' => 't3.nome', 'dt' => 7, 'formatter' => function ($d, $row) {
         return $d;
     }),
 

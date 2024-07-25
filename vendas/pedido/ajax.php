@@ -12,7 +12,7 @@ $table = array(
 $primaryKey = 'id_pedido';
 
 $columns = array(
-    array('db' => 'id_pedido', 'dt' => 0, 'formatter' => function ($d, $row) {
+    array('db' => 't1.codigo', 'dt' => 0, 'formatter' => function ($d, $row) {
         return $d;
     }),
     array('db' => 't2.nome', 'as' => 'nome2', 'dt' => 1, 'formatter' => function ($d, $row) {
@@ -22,31 +22,23 @@ $columns = array(
             return $d;
         }
     }),
-    array('db' => 't1.codigo',  'dt' => 2, 'formatter' => function ($d, $row) {
-        if ($d != '') {
-            return $d;
-        } else {
-            return '';
-        }
-    }),
-
-    array('db' => 't4.nomes', 'as' => 'nome4', 'dt' => 3, 'formatter' => function ($d, $row) {
+    array('db' => 't4.nome', 'as' => 'nome4', 'dt' => 2, 'formatter' => function ($d, $row) {
         return mb_strtoupper($d);
     }),
-    array('db' => 't3.nome', 'as' => 'nome3', 'dt' => 4, 'formatter' => function ($d, $row) {
+    array('db' => 't3.nome', 'as' => 'nome3', 'dt' => 3, 'formatter' => function ($d, $row) {
         return $d;
     }),
-    array('db' => 'dt_emissao', 'dt' => 5, 'formatter' => function ($d, $row) {
+    array('db' => 'dt_emissao', 'dt' => 4, 'formatter' => function ($d, $row) {
         return $d;
     }),
-    array('db' => 'vl_pedido', 'dt' => 6, 'formatter' => function ($d, $row) {
-        return $d;
+    array('db' => 'vl_pedido', 'dt' => 5, 'formatter' => function ($d, $row) {
+        return number_format($d, 2, ",", ".");
     }),
 
-    array('db' => 't1.status', 'as' => 'status_o', 'dt' => 7, 'formatter' => function ($d, $row) {
+    array('db' => 't1.status', 'as' => 'status', 'dt' => 6, 'formatter' => function ($d, $row) {
         return $d;
     }),
-    array('db' => 'id_pedido', 'dt' => 8, 'formatter' => function ($d, $row) {
+    array('db' => 'id_pedido', 'dt' => 7, 'formatter' => function ($d, $row) {
         return $d;
     }),
 

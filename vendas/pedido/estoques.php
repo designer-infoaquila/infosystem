@@ -32,7 +32,7 @@ $columns = array(
         return $d;
     }),
     array('db' => 'espessura', 'dt' => 2, 'formatter' => function ($d, $row) {
-        return  $d . 'x ' . $row[3] . 'x ' . $row[4] . '= ' . number_format($row[5], 2, ',', '');
+        return  'Esp ' . number_format($d, 1, ',', '') . ' Cm - ' . number_format($row[3], 2, ',', '') . ' x ' . number_format($row[4], 2, ',', '') . ' = ' . number_format($row[5], 2, ',', '');
     }),
     array('db' => 'comprimento', 'dt' => 3, 'formatter' => function ($d, $row) {
         return  $d;

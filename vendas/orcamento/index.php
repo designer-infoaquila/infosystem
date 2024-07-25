@@ -16,7 +16,9 @@
     #kt_datatable th:nth-last-child(2),
     #kt_datatable td:nth-last-child(2):not(.dataTables_empty),
     #kt_datatable th:nth-last-child(3),
-    #kt_datatable td:nth-last-child(3):not(.dataTables_empty) {
+    #kt_datatable td:nth-last-child(3):not(.dataTables_empty),
+    #kt_datatable th:nth-last-child(4),
+    #kt_datatable td:nth-last-child(4):not(.dataTables_empty) {
         display: none;
     }
 </style>
@@ -105,6 +107,7 @@
                                 <th>Vendedor</th>
                                 <th>Status</th>
                                 <th>Ações</th>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>

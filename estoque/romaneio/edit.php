@@ -19,7 +19,7 @@ $id_romaneio = $linha['id_romaneio'];
 
 $data = new DateTime($linha['dt_emissao']);
 
-$consultaProd = $pdo->query("SELECT id_r_produto, descricao, chapas, t1.unidade, t1.espessura, comprimento, altura, metro, t2.moeda, t2.valor AS custo FROM romaneio_produtos as t1 INNER JOIN produtos as t2 ON t1.id_produto = t2.id_produto WHERE id_romaneio = " . $id_romaneio . " ORDER BY t1.id_r_produto ASC");
+$consultaProd = $pdo->query("SELECT id_r_produto, descricao, chapas, t1.unidade, t1.espessura, comprimento, altura, metro, t2.moeda, t1.custo FROM romaneio_produtos as t1 INNER JOIN produtos as t2 ON t1.id_produto = t2.id_produto WHERE id_romaneio = " . $id_romaneio . " ORDER BY t1.id_r_produto ASC");
 $total = $consultaProd->rowCount();
 
 if ($total >= 1) {
@@ -34,12 +34,10 @@ if ($total >= 1) {
 
         $loopProd .= '<tr>
                         <td class="text-center">' . $i . '</td>
-                        <td>' . $linhaProd['descricao'] . '</td>
-                        <td>' .  number_format($linhaProd['espessura'], 2, ",", "") . '</td>
-                        <td>' .  number_format($linhaProd['comprimento'], 2, ",", "") . '</td>
-                        <td>' .  number_format($linhaProd['altura'], 2, ",", "") . '</td>
-                        <td>' . $linhaProd['chapas'] . '</td>
+                        <td>' . mb_strtoupper($linhaProd['descricao']) . '</td>
+                        <td>Esp ' . number_format($linhaProd['espessura'], 2, ",", "") . ' Cm - ' . number_format($linhaProd['comprimento'], 2, ",", "") . ' x ' . number_format($linhaProd['altura'], 2, ",", "") . ' Metros</td>
                         <td>' .  number_format($linhaProd['metro'], 3, ",", "") . '</td>
+                        <td>' . $linhaProd['chapas'] . '</td>
                         <td class="text-nowrap">R$ ' . $custo . '</td>
                         <td style="padding: 0px;text-align: center;">
                             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon remover-produto" title="Remover" id="' . $linhaProd['id_r_produto'] . '">
@@ -65,16 +63,14 @@ if ($total >= 1) {
     }
 
     $loopProd .= '<tr style="background-color: #4a78c885;">
-                        <td class="text-center"></td>
-                        <td><b>TOTAL</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>' . $totalChapas . '</td>
-                        <td>' .  number_format($totalMetros, 3, ",", "") . '</td>
-                        <td class="text-nowrap">R$ ' . number_format($totalCusto, 2, ",", ".") . '</td>
-                        <td></td>
-                    </tr>';
+        <td class="text-center"></td>
+        <td><b>TOTAL</b></td>
+        <td></td>
+        <td>' .  number_format($totalMetros, 3, ",", "") . '</td>
+        <td>' . $totalChapas . '</td>
+        <td class="text-nowrap">R$ ' . number_format($totalCusto, 2, ",", ".") . '</td>
+        <td></td>
+    </tr>';
 } else {
     $loopProd .= "<tr>
                  <th class='text-center' colspan='9'>Sem produtos cadastrados</th>
@@ -194,15 +190,13 @@ if ($total >= 1) {
                                     <div class="table-responsive-lg">
 
                                         <table class="table table-striped table-bordered ">
-                                            <thead>
-                                                <tr class="table-active">
+                                            <thead style="background: #9acfea;">
+                                                <tr>
                                                     <th class="text-center" scope="col">Item</th>
                                                     <th scope="col">Descrição</th>
-                                                    <th scope="col">Esp.</th>
-                                                    <th scope="col">Comp.</th>
-                                                    <th scope="col">Altura</th>
-                                                    <th scope="col">Chapas</th>
+                                                    <th scope="col">Medidas</th>
                                                     <th scope="col">Metro</th>
+                                                    <th scope="col">Chapas</th>
                                                     <th class="text-nowrap" scope="col">Custo Pedra.</th>
                                                     <th style="width: 40px;">#</th>
                                                 </tr>
@@ -315,7 +309,7 @@ if ($total >= 1) {
                     </div>
 
                     <div class="modal-body p-5">
-                        <div class="scroll scroll-pull" data-scroll="true" data-wheel-propagation="true" style="height: 450px">
+                        <div data-scroll="true" data-height="500">
                             <div class="row mb-0">
                                 <div class="col-12">
                                     <div class="" id="produtos" data-wizard-state="step-first" data-wizard-clickable="true">

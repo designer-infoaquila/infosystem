@@ -11,7 +11,7 @@ $primaryKey = 'id_r_produto';
 
 $columns = array(
 
-    array('db' => 't1.codigo', 'dt' => 0, 'formatter' => function ($d, $row) {
+    array('db' => 't2.codigo', 'dt' => 0, 'formatter' => function ($d, $row) {
 
         return $d;
     }),
@@ -25,13 +25,13 @@ $columns = array(
     }),
 
     array('db' => 't1.espessura', 'dt' => 2, 'formatter' => function ($d, $row) {
-        return number_format($d, 2, ",", ".");
+        return 'Esp ' . number_format($d, 1, ",", "") . " Cm - " . number_format($row[3], 2, ",", "") . " x " . number_format($row[4], 2, ",", "") . " Metros";
     }),
     array('db' => 'comprimento', 'dt' => 3, 'formatter' => function ($d, $row) {
-        return number_format($d, 2, ",", ".");
+        return $d;
     }),
     array('db' => 'altura', 'dt' => 4, 'formatter' => function ($d, $row) {
-        return number_format($d, 2, ",", ".");
+        return $d;
     }),
     array('db' => 'id_r_produto', 'dt' => 5, 'formatter' => function ($d, $row) {
         return $d;

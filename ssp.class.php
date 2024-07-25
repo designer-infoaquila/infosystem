@@ -195,7 +195,11 @@ class SSP
                 if ($requestColumn['searchable'] == 'true') {
                     if (!empty($column['db'])) {
                         // $binding = self::bind($bindings, '%' . $str . '%', PDO::PARAM_STR);
-                        $globalSearch[] = "" . $column['db'] . " LIKE '%" . $str . "%' ";
+                        if ($column['db'] == 'espessura' || $column['db'] == 'comprimento' || $column['db'] == 'altura' || $column['db'] == 'metro' || $column['db'] == 'medidas') {
+                            $globalSearch[] = "" . $column['db'] . " LIKE '%" . str_replace(",", ".", $str) . "%' ";
+                        } else {
+                            $globalSearch[] = "" . $column['db'] . " LIKE '%" . $str . "%' ";
+                        }
                     }
                 }
             }
@@ -212,8 +216,13 @@ class SSP
 
                 if ($requestColumn['searchable'] == 'true' && $str != '') {
                     if (!empty($column['db'])) {
+                        if ($column['db'] == 'espessura' || $column['db'] == 'comprimento' || $column['db'] == 'altura' || $column['db'] == 'metro' || $column['db'] == 'medidas') {
+                            $globalSearch[] = "" . $column['db'] . " LIKE '%" . str_replace(",", ".", $str) . "%'";
+                        } else {
+                            $columnSearch[] = "" . $column['db'] . " LIKE '%" . $str . "%'";
+                        }
                         // $binding = self::bind($bindings, '%' . $str . '%', PDO::PARAM_STR);
-                        $columnSearch[] = "" . $column['db'] . " LIKE '%" . $str . "%'";
+
                     }
                 }
             }

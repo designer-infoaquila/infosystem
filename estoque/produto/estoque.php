@@ -17,10 +17,10 @@ unset($_SESSION['complex']);
         padding: 0.5rem 0.5rem !important;
     }
 
-    .table tbody td:nth-child(4):not(.dataTables_empty),
-    .table thead th:nth-child(4):not(.dataTables_empty),
     .table tbody td:nth-child(5):not(.dataTables_empty),
-    .table thead th:nth-child(5):not(.dataTables_empty) {
+    .table thead th:nth-child(5):not(.dataTables_empty),
+    .table tbody td:nth-child(6):not(.dataTables_empty),
+    .table thead th:nth-child(6):not(.dataTables_empty) {
         display: none;
     }
 </style>
@@ -93,6 +93,7 @@ unset($_SESSION['complex']);
                                 <th>Código</th>
                                 <th>Data Emissão&nbsp;&nbsp;&nbsp;</th>
                                 <th>Medidas</th>
+                                <th>M²</th>
                                 <th>Medidas</th>
                                 <th>Medidas</th>
                                 <th>Quantidade</th>

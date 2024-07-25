@@ -16,10 +16,10 @@ $columns = array(
         return $d;
     }),
     array('db' => 'os',  'dt' => 1, 'formatter' => function ($d, $row) {
-        if ($d != '') {
-            return $d;
+        if ($row[11] != '') {
+            return $d . '<br><b style="font-size: smaller;">' . $row[11] . '</b>';
         } else {
-            return '';
+            return $d;
         }
     }),
     array('db' => 't4.nome', 'as' => 'nome4', 'dt' => 2, 'formatter' => function ($d, $row) {
@@ -60,6 +60,9 @@ $columns = array(
         return $d;
     }),
     array('db' => 't4.sem', 'dt' => 10, 'formatter' => function ($d, $row) {
+        return $d;
+    }),
+    array('db' => 't1.complemento', 'dt' => 11, 'formatter' => function ($d, $row) {
         return $d;
     }),
 

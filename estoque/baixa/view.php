@@ -19,15 +19,13 @@ if ($total >= 1) {
     while ($linhaProd = $consultaProd->fetch(PDO::FETCH_ASSOC)) {
 
         $loopProd .= '<tr>
-                        <td class="text-center">' . $i . '</td>
-                        <td>' . $linhaProd['codigo'] . '</td>
-                        <td>' . $linhaProd['descricao'] . '</td>
-                        <td>' .  number_format($linhaProd['espessura'], 2, ",", "") . '</td>
-                        <td>' .  number_format($linhaProd['comprimento'], 2, ",", "") . '</td>
-                        <td>' .  number_format($linhaProd['altura'], 2, ",", "") . '</td>
-                        <td>' . $linhaProd['chapas'] . '</td>
-                        <td>' .  number_format($linhaProd['metro'], 3, ",", "") . '</td>
-                    </tr>';
+            <td class="text-center">' . $i . '</td>
+            <td>' . $linhaProd['codigo'] . '</td>
+            <td>' . $linhaProd['descricao'] . '</td>
+            <td>Esp ' . number_format($linhaProd['espessura'], 2, ",", "") . ' Cm - ' . number_format($linhaProd['comprimento'], 2, ",", "") . ' x ' . number_format($linhaProd['altura'], 2, ",", "") . ' Metros</td>
+            <td>' .  number_format($linhaProd['metro'], 3, ",", "") . '</td>
+            <td>' . $linhaProd['chapas'] . '</td>
+        </tr>';
 
         $i++;
 
@@ -36,19 +34,16 @@ if ($total >= 1) {
     }
 
     $loopProd .= '<tr style="background-color: #4a78c885;">
-                        <td class="text-center"></td>
-                        <td></td>
-                        <td><b>TOTAL</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>' . $totalChapas . '</td>
-                        <td>' .  number_format($totalMetros, 3, ",", "") . '</td>
-                        
-                    </tr>';
+        <td class="text-center"></td>
+        <td></td>
+        <td><b>TOTAL</b></td>
+        <td></td>
+        <td>' .  number_format($totalMetros, 3, ",", "") . '</td>
+        <td>' . $totalChapas . '</td>
+    </tr>';
 } else {
     $loopProd .= "<tr>
-                 <th class='text-center' colspan='8'>Sem produtos cadastrados</th>
+                 <th class='text-center' colspan='6'>Sem produtos cadastrados</th>
              </tr>";
 }
 ?>
@@ -139,11 +134,9 @@ if ($total >= 1) {
                                                 <th class="text-center" scope="col">Item</th>
                                                 <th scope="col">Código</th>
                                                 <th scope="col">Descrição</th>
-                                                <th scope="col">Esp.</th>
-                                                <th scope="col">Comp.</th>
-                                                <th scope="col">Altura</th>
-                                                <th scope="col">Chapas</th>
+                                                <th scope="col">Medidas</th>
                                                 <th scope="col">Metro</th>
+                                                <th scope="col">Chapas</th>
                                             </tr>
                                         </thead>
                                         <tbody class="produtos">

@@ -143,22 +143,20 @@ $stmt->execute();
                                     <div class="table-responsive-lg">
 
                                         <table class="table table-striped table-bordered ">
-                                            <thead>
-                                                <tr class="table-active">
+                                            <thead style="background: #9acfea;">
+                                                <tr>
                                                     <th class="text-center" scope="col">Item</th>
                                                     <th scope="col">Descrição</th>
-                                                    <th scope="col">Esp.</th>
-                                                    <th scope="col">Comp.</th>
-                                                    <th scope="col">Altura</th>
-                                                    <th scope="col">Chapas</th>
+                                                    <th scope="col">Medidas</th>
                                                     <th scope="col">Metro</th>
+                                                    <th scope="col">Chapas</th>
                                                     <th class="text-nowrap" scope="col">Custo Pedra.</th>
                                                     <th style="width: 90px;">#</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="produtos">
                                                 <tr>
-                                                    <th class="text-center" colspan="9">Sem produtos cadastrados</th>
+                                                    <th class="text-center" colspan="7">Sem produtos cadastrados</th>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -264,7 +262,7 @@ $stmt->execute();
                     </div>
 
                     <div class="modal-body p-5">
-                        <div class="scroll scroll-pull" data-scroll="true" data-wheel-propagation="true" style="height: 450px">
+                        <div data-scroll="true" data-height="500">
                             <div class="row mb-0">
                                 <div class="col-12">
                                     <div class="" id="produtos" data-wizard-state="step-first" data-wizard-clickable="true">

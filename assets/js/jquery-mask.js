@@ -161,6 +161,10 @@ var KTMaskDemo = (function () {
 			reverse: true,
 		});
 
+		$('.qtd1Mask').mask('###0,0', {
+			reverse: true,
+		});
+
 		$('.qtdMask').mask('###0,00', {
 			reverse: true,
 		});

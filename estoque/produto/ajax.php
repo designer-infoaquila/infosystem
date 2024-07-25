@@ -32,7 +32,7 @@ $columns = array(
         if ($d != '0.00') {
             return number_format($d, 2, ",", ".");
         } else {
-            return '--';
+            return '0,00';
         }
     }),
     array('db' => 'ncm', 'dt' => 4, 'formatter' => function ($d, $row) {

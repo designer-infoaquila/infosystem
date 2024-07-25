@@ -108,9 +108,9 @@ if ($type == 'produto_edit') {
 if ($type == 'produto_remove') {
 
     try {
-        $_stmt_ = $pdo->prepare('UPDATE produtos SET status = 0 WHERE id_produto = :id');
-        $stmt->bindParam(':id', $_POST['id']);
-        $stmt->execute();
+        $_stmt = $pdo->prepare('UPDATE produtos SET status = 0 WHERE id_produto = :id');
+        $_stmt->bindParam(':id', $_POST['id']);
+        $_stmt->execute();
 
         echo 'success||';
     } catch (PDOException $e) {

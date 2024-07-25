@@ -11,6 +11,7 @@ var KTDatatablesDataSourceAjaxServer = (function () {
 			serverSide: true,
 			ajax: HOST_URL + 'vendas/orcamento/ajax.php',
 			order: [[1, 'asc']],
+			autoWidth: false,
 			columnDefs: [
 				{
 					targets: 0,
@@ -20,7 +21,7 @@ var KTDatatablesDataSourceAjaxServer = (function () {
 				},
 				{
 					targets: 1,
-					width: '70px',
+					width: '100px',
 					className: 'text-center',
 				},
 				{
@@ -31,6 +32,7 @@ var KTDatatablesDataSourceAjaxServer = (function () {
 					className: 'text-center',
 					targets: 6,
 					title: 'Status',
+					width: '65px',
 					orderable: false,
 					render: function (data, type, row) {
 
@@ -44,7 +46,7 @@ var KTDatatablesDataSourceAjaxServer = (function () {
 				},
 
 				{
-					width: '120px',
+					width: '140px',
 					className: 'text-center',
 					targets: 7,
 					title: 'Ações',
